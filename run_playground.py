@@ -38,7 +38,7 @@ def run_script_with_args(
             print("Script executed successfully:")
             if 'Not Working' in result.stdout:
                 retry = retry + 1
-                print(f'Not Working, Trying again of {retry} time !!')
+                print(f'Not Working, Trying again!! retry={retry} ')
             else:
                 print('Working')          
                 print('Result saved!!')
