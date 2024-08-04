@@ -46,7 +46,7 @@ from sklearn.preprocessing import (
 import seaborn as sns
 import sys
 import csv
-
+print("----------------")
 sns.set_style("white", {"axes.spines.right": False, "axes.spines.top": False})
 # from google.colab import files
 # print("jai jai",sys.argv[0])
@@ -54,6 +54,7 @@ sns.set_style("white", {"axes.spines.right": False, "axes.spines.top": False})
 # Setting the timeframe for the data extraction
 # end_date =  date.today().strftime("%Y-%m-%d")
 # Getting NASDAQ quotes
+print(sys.argv)
 stockname = sys.argv[1]
 symbol = sys.argv[2]
 start_date = sys.argv[3]
@@ -86,6 +87,8 @@ if df.size >= 18000:
 else:
     print(df.size)
     print("Try to increase start date \U0001F61E")
+    sys.exit()
+
 df = df.drop(DROP_FEATURES, axis=1)
 print(df.tail(10))
 
