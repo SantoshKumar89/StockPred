@@ -33,33 +33,23 @@ def run_script_with_args(
     print(f"Running command: {' '.join(command)}")  # Debugging line
     retry = 0
 
-    try:
-        result = subprocess.run(command, capture_output=True, text=True)
-    except FileNotFoundError as e:
-        print(f"FileNotFoundError: {e}")
-    except Exception as e:
-        print(f"An error occurred: {e}")    
-    # ['/Users/santoshkumar/Documents/Repository/Stock_prediction_python/playground_hourly_high_multi_input_forecast.py', 'NIFTY 50', '^NSEI', '2022-08-25', '00:00:00', '2024-07-01', '09:15:00', '1h', '35', '1']
-    # ['python3', 'playground_hourly_high_multi_input_forecast.py', 'NIFTY50', '^NSEI', '2022-08-25', '00:00:00', '2024-07-01', '09:15:00', '1h', '35', '1']
-
-    print(result.stderr)
     while retry < 5:
-        # result = subprocess.run(command, capture_output=True, text=True)
+        result = subprocess.run(command, capture_output=True, text=True)
 
         if result.returncode == 0:
             print("Script executed successfully:")
             if "Not Working" in result.stdout:
                 retry = retry + 1
                 print(f"Not Working, Trying again!! retry={retry} ")
-                print(result.stderr)
+                print(result.stdout)
             else:
                 print("Working")
                 print("Result saved!!")
-                print(result.stderr)
+                print(result.stdout)
                 break
         else:
             print("Error executing script:")
-            print(result.stderr)
+            print(result.stdout)
 
 
 def main():
@@ -70,7 +60,7 @@ def main():
     output_sequence_length = "1"
     interval = "1h"
 
-    df = yf.download(symbol, end="2024-08-30", start="2024-07-01", interval=interval)
+    df = yf.download(symbol, end="2024-07-02", start="2024-07-01", interval=interval)
     start_date = "2022-08-25"
     start_time = "00:00:00"
 
