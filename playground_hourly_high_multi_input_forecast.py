@@ -390,7 +390,7 @@ if np.round(MAE, 2) <= 200 and np.round(MAPE, 2) <= 0.9 and np.round(MDAPE, 2) <
         # Write the data to the CSV file
         data = [
             [
-                end_date,
+                end_date+end_time,
                 actualDf["High"].values.max(),
                 Predicted_High,
                 actualDf["High"].values.max() - Predicted_High,
