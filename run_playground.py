@@ -3,15 +3,42 @@
 import subprocess
 
 
-def run_script_with_args(script_path, arg1, arg2):
+def run_script_with_args(
+    script_path,
+    stockname,
+    symbol,
+    start_date,
+    start_time,
+    end_date,
+    end_time,
+    interval,
+    input_sequence_length,
+    output_sequence_length,
+):
 
-    command = ["python3", script_path, arg1, arg2]
-    print(f"Running command: {' '.join(command)}")  # Debugging line
+    command = [
+        "python3",
+        script_path,
+        stockname,
+        symbol,
+        start_date,
+        start_time,
+        end_date,
+        end_time,
+        interval,
+        input_sequence_length,
+        output_sequence_length,
+    ]
+    
     result = subprocess.run(command, capture_output=True, text=True)
 
     if result.returncode == 0:
         print("Script executed successfully:")
-        print(result.stdout)
+        if 'Not Working' in result.stdout:
+            print('Not Working Try again!!')  
+        else:
+            print('Working Try again!!')          
+            print('Result saved!!')
     else:
         print("Error executing script:")
         print(result.stderr)
@@ -26,8 +53,8 @@ def main():
     end_date = "2024-07-25"
     end_time = "10:15:00"
     interval = "1h"
-    input_sequence_length = 35
-    output_sequence_length = 1
+    input_sequence_length = "35"
+    output_sequence_length = "1"
 
     run_script_with_args(
         script_path,

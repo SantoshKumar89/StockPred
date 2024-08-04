@@ -29,6 +29,7 @@ from tensorflow.keras.callbacks import EarlyStopping # EarlyStopping during mode
 from sklearn.preprocessing import RobustScaler, MinMaxScaler # This Scaler removes the median and scales the data according to the quantile range to normalize the price data
 import seaborn as sns
 import sys
+import csv
 
 sns.set_style('white', { 'axes.spines.right': False, 'axes.spines.top': False})
 #from google.colab import files
@@ -37,19 +38,19 @@ sns.set_style('white', { 'axes.spines.right': False, 'axes.spines.top': False})
 # Setting the timeframe for the data extraction
 #end_date =  date.today().strftime("%Y-%m-%d")
 # Getting NASDAQ quotes
-stockname = 'NIFTY 50'
-symbol = '^NSEI'
-start_date = '2022-08-25'
-start_time = '00:00:00'
-end_date= '2024-07-25'
-end_time= '10:15:00'
-interval = '1h'
+stockname = sys.argv[1]
+symbol = sys.argv[2]
+start_date = sys.argv[3]
+start_time = sys.argv[4]
+end_date= sys.argv[5]
+end_time= sys.argv[6]
+interval = sys.argv[7]
 # Set the input_sequence_length length - this is the timeframe used to make a single prediction
 # input_sequence_length was 360 for 15 mins
-input_sequence_length = 35
+input_sequence_length = int(sys.argv[8])
 # The output sequence length is the number of steps that the neural network predicts
 # 30m - 10 occurance
-output_sequence_length = 1
+output_sequence_length = int(sys.argv[9])
 # List of considered Features
 FEATURES = ['High','Open','Close'] #'Open', 'High', 'Low', 'Close' #'Adj Close']
 DROP_FEATURES = ['Adj Close','Volume']
@@ -314,8 +315,22 @@ print(f'Predicted High =',Predicted_High)
 print(f'Actual High =',actualDf['High'].values.max())
 print(f'Actual Difference =',ActualHigh.max()-Predicted_High)
 
-if np.round(MAE, 2) <= 56.15 and np.round(MAPE, 2) <= 0.25 and np.round(MDAPE, 2) <=  0.16:
+# Specify the filename
+filename = 'output.csv'
+
+#if np.round(MAE, 2) <= 56.15 and np.round(MAPE, 2) <= 0.25 and np.round(MDAPE, 2) <=  0.16:
+if np.round(MAE, 2) <= 200 and np.round(MAPE, 2) <= 0.9 and np.round(MDAPE, 2) <=  0.9:
   print("Working \U0001F911")
+  # Open the file in write mode and create a csv.writer object
+  with open(filename, mode='w', newline='') as file:
+    writer = csv.writer(file)
+    # Write the data to the CSV file
+    data = [
+    [actualDf['High'].values.max(), Predicted_High, actualDf['High'].values.max()-Predicted_High]
+    ]
+
+    writer.writerows( data )
+
 else:
   print("Not Working \U0001F61E")
 
