@@ -29,19 +29,23 @@ def run_script_with_args(
         input_sequence_length,
         output_sequence_length,
     ]
-    
-    result = subprocess.run(command, capture_output=True, text=True)
+    retry = 0
 
-    if result.returncode == 0:
-        print("Script executed successfully:")
-        if 'Not Working' in result.stdout:
-            print('Not Working Try again!!')  
+    while(retry < 5): 
+        result = subprocess.run(command, capture_output=True, text=True)
+
+        if result.returncode == 0:
+            print("Script executed successfully:")
+            if 'Not Working' in result.stdout:
+                retry = retry + 1
+                print(f'Not Working, Trying again of {retry} time !!')
+            else:
+                print('Working')          
+                print('Result saved!!')
+                break
         else:
-            print('Working Try again!!')          
-            print('Result saved!!')
-    else:
-        print("Error executing script:")
-        print(result.stderr)
+            print("Error executing script:")
+            print(result.stderr)
 
 
 def main():
