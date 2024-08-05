@@ -402,7 +402,7 @@ if np.round(MAE, 2) <= 40.00 and np.round(MAPE, 2) <= 0.20 and np.round(MDAPE, 2
         writer.writerows(data)
 
 else:
-    print("Not Working \U0001F61E")
+    print("Not-Working \U0001F61E")
 
 # Prediction Date: 2024-07-01
 # Median Absolute Error (MAE): 99.19
