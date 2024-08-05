@@ -2,7 +2,8 @@
 
 import subprocess
 import yfinance as yf
-
+import time
+import sys
 
 def run_script_with_args(
     script_path,
@@ -41,15 +42,19 @@ def run_script_with_args(
             if "Not Working" in result.stdout:
                 retry = retry + 1
                 print(f"Not Working, Trying again!! retry={retry} ")
-                #print(result.stdout)
+                print(result.stdout)
+            if "Try to increase start date" in result.stdout:
+                print(f" Less data or no data between{start_date} and {end_date} ")
+                print(f" change {start_date} so that yahoo finance can give data ")
+                sys.exit(1)
             else:
                 print("Working")
                 print("Result saved!!")
-                #print(result.stdout)
+                print(result.stdout)
                 break
         else:
-            print("Error executing script:")
             print(result.stderr)
+            sys.exit("Stopping execution due to failure.")
 
 
 def main():
@@ -70,7 +75,7 @@ def main():
         end_time = str(index.time())
 
         print(f"Prediction for {end_date} {end_time} Started")
-
+        execition_start_time = time.time()
         run_script_with_args(
             script_path,
             stockname,
@@ -83,7 +88,9 @@ def main():
             input_sequence_length,
             output_sequence_length,
         )
+        execition_end_time = time.time()
         print(f"Prediction for {end_date} {end_time} Completed")
+        print(f"Execution time: {execition_end_time - execition_start_time } seconds")
 
 
 if __name__ == "__main__":

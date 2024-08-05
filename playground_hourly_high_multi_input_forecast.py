@@ -87,8 +87,8 @@ if df.size >= 18000:
 else:
     print(df.size)
     print("Try to increase start date \U0001F61E")
-    sys.exit()
-
+    sys.exit(1)
+    
 df = df.drop(DROP_FEATURES, axis=1)
 print(df.tail(10))
 
