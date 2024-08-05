@@ -210,14 +210,14 @@ n_output_neurons = output_sequence_length
 # Model with n_neurons = inputshape Timestamps, each with x_train.shape[2] variables
 n_input_neurons = x_train.shape[1] * x_train.shape[2]
 print(n_input_neurons, x_train.shape[1], x_train.shape[2])
+#128 and 64
 model.add(
-    LSTM(128, return_sequences=True, input_shape=(x_train.shape[1], x_train.shape[2]))
+    LSTM(1, return_sequences=False, input_shape=(x_train.shape[1], x_train.shape[2]))
 )
-model.add(LSTM(64, return_sequences=False))
-# model.add(Dense(25))
-# model.add(LSTM(n_input_neurons, return_sequences=True, input_shape=(x_train.shape[1], x_train.shape[2])))
-# model.add(LSTM(n_input_neurons, return_sequences=False))
-# model.add(Dense(25))
+#model.add(
+#    LSTM(128, return_sequences=True, input_shape=(x_train.shape[1], x_train.shape[2]))
+#)
+#model.add(LSTM(64, return_sequences=False))
 model.add(Dense(n_output_neurons))
 
 # Compile the model
@@ -352,11 +352,14 @@ MDAPE = (
     np.median((np.abs(np.subtract(y_test_unscaled, y_pred) / y_test_unscaled))) * 100
 )
 
+# for hourly prediction
+base_time = datetime.strptime(end_time, '%H:%M:%S')
+next_interval = base_time  + timedelta(hours=1)
+next_interval_string = next_interval.strftime('%H:%M:%S')
 
-end_of_day = "16:00:00"
 # Convert string to datetime
 start_date_time = datetime.strptime(end_date + end_time, "%Y-%m-%d%H:%M:%S")
-end_date_time = datetime.strptime(end_date + end_of_day, "%Y-%m-%d%H:%M:%S")
+end_date_time = datetime.strptime(end_date + next_interval_string , "%Y-%m-%d%H:%M:%S")
 actualDf = yf.download(
     symbol, end=end_date_time, start=start_date_time, interval=interval
 )
@@ -382,7 +385,7 @@ print(f"Actual Difference =", ActualHigh.max() - Predicted_High)
 filename = "output.csv"
 
 # if np.round(MAE, 2) <= 56.15 and np.round(MAPE, 2) <= 0.25 and np.round(MDAPE, 2) <=  0.16:
-if np.round(MAE, 2) <= 500:
+if np.round(MAE, 2) > 0:
     print("Working \U0001F911")
     # Open the file in write mode and create a csv.writer object
     with open(filename, mode="a", newline="") as file:
