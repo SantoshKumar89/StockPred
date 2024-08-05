@@ -210,21 +210,17 @@ n_output_neurons = output_sequence_length
 # Model with n_neurons = inputshape Timestamps, each with x_train.shape[2] variables
 n_input_neurons = x_train.shape[1] * x_train.shape[2]
 print(n_input_neurons, x_train.shape[1], x_train.shape[2])
-#128 and 64
 model.add(
-    LSTM(1, return_sequences=False, input_shape=(x_train.shape[1], x_train.shape[2]))
+    LSTM(128, return_sequences=True, input_shape=(x_train.shape[1], x_train.shape[2]))
 )
-#model.add(
-#    LSTM(128, return_sequences=True, input_shape=(x_train.shape[1], x_train.shape[2]))
-#)
-#model.add(LSTM(64, return_sequences=False))
+model.add(LSTM(64, return_sequences=False))
 model.add(Dense(n_output_neurons))
 
 # Compile the model
 model.compile(optimizer="adam", loss="mse")
 
 # Training the model
-epochs = 1  # 50
+epochs = 50
 batch_size = 64
 
 early_stop = EarlyStopping(monitor="loss", patience=15, verbose=1)
@@ -384,8 +380,7 @@ print(f"Actual Difference =", ActualHigh.max() - Predicted_High)
 # Specify the filename
 filename = "output.csv"
 
-# if np.round(MAE, 2) <= 56.15 and np.round(MAPE, 2) <= 0.25 and np.round(MDAPE, 2) <=  0.16:
-if np.round(MAE, 2) > 0:
+if np.round(MAE, 2) <= 56.15 and np.round(MAPE, 2) <= 0.25 and np.round(MDAPE, 2) <=  0.16:
     print("Working \U0001F911")
     # Open the file in write mode and create a csv.writer object
     with open(filename, mode="a", newline="") as file:
