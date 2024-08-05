@@ -220,7 +220,7 @@ model.add(Dense(n_output_neurons))
 model.compile(optimizer="adam", loss="mse")
 
 # Training the model
-epochs = 50
+epochs = 500
 batch_size = 64
 
 early_stop = EarlyStopping(monitor="loss", patience=15, verbose=1)
@@ -380,7 +380,7 @@ print(f"Actual Difference =", ActualHigh.max() - Predicted_High)
 # Specify the filename
 filename = "output.csv"
 
-if np.round(MAE, 2) <= 56.15 and np.round(MAPE, 2) <= 0.25 and np.round(MDAPE, 2) <=  0.16:
+if np.round(MAE, 2) <= 40.00 and np.round(MAPE, 2) <= 0.20 and np.round(MDAPE, 2) <=  0.15:
     print("Working \U0001F911")
     # Open the file in write mode and create a csv.writer object
     with open(filename, mode="a", newline="") as file:
