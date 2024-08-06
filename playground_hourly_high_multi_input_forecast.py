@@ -385,7 +385,7 @@ if np.round(MAE, 2) <= 40.00 and np.round(MAPE, 2) <= 0.20 and np.round(MDAPE, 2
     print("Working \U0001F911")
     print(f"Writing to {output_csv_path}")
     # Open the file in write mode and create a csv.writer object
-    with open(output_csv_path, mode="a", newline="") as file:
+    with open(output_csv_path, mode="a", newline='') as file:
         writer = csv.writer(file)
         # Write the data to the CSV file
         data = [
