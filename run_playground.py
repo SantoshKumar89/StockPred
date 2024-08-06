@@ -16,6 +16,7 @@ def run_script_with_args(
     interval,
     input_sequence_length,
     output_sequence_length,
+    output_csv_path,
 ):
     
     command = [
@@ -30,6 +31,7 @@ def run_script_with_args(
         interval,
         input_sequence_length,
         output_sequence_length,
+        output_csv_path,
     ]
     #print(f"Running command: {' '.join(command)}")  # Debugging line
     retry = 0
@@ -55,6 +57,7 @@ def run_script_with_args(
 
 def main():
     script_path = "playground_hourly_high_multi_input_forecast.py"
+    output_csv_path = "output.csv"
     stockname = "NIFTY50"
     symbol = "^NSEI"
     input_sequence_length = "35"
@@ -83,6 +86,7 @@ def main():
             interval,
             input_sequence_length,
             output_sequence_length,
+            output_csv_path
         )
         execition_end_time = time.time()
         print(f"Prediction for {end_date} {end_time} Completed")

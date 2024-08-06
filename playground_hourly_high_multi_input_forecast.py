@@ -62,12 +62,15 @@ start_time = sys.argv[4]
 end_date = sys.argv[5]
 end_time = sys.argv[6]
 interval = sys.argv[7]
+
 # Set the input_sequence_length length - this is the timeframe used to make a single prediction
 # input_sequence_length was 360 for 15 mins
 input_sequence_length = int(sys.argv[8])
 # The output sequence length is the number of steps that the neural network predicts
 # 30m - 10 occurance
 output_sequence_length = int(sys.argv[9])
+output_csv_path = sys.argv[10]
+
 # List of considered Features
 FEATURES = ["High", "Open", "Close"]  #'Open', 'High', 'Low', 'Close' #'Adj Close']
 DROP_FEATURES = ["Adj Close", "Volume"]
@@ -377,13 +380,12 @@ print(f"Predicted High =", Predicted_High)
 print(f"Actual High =", actualDf["High"].values.max())
 print(f"Actual Difference =", ActualHigh.max() - Predicted_High)
 
-# Specify the filename
-filename = "output.csv"
 
 if np.round(MAE, 2) <= 40.00 and np.round(MAPE, 2) <= 0.20 and np.round(MDAPE, 2) <=  0.15:
     print("Working \U0001F911")
+    print(f"Writing to {output_csv_path}")
     # Open the file in write mode and create a csv.writer object
-    with open(filename, mode="a", newline="") as file:
+    with open(output_csv_path, mode="a", newline="") as file:
         writer = csv.writer(file)
         # Write the data to the CSV file
         data = [
