@@ -72,8 +72,8 @@ output_sequence_length = int(sys.argv[9])
 output_csv_path = sys.argv[10]
 
 # List of considered Features
-FEATURES = ["High", "Open", "Close"]  #'Open', 'High', 'Low', 'Close' #'Adj Close']
-DROP_FEATURES = ["Adj Close", "Volume"]
+FEATURES = ['High','Open','Close','Low'] #'Open', 'High', 'Low', 'Close' #'Adj Close']
+DROP_FEATURES = ['Adj Close','Volume','Datetime']
 # Convert string to datetime
 start_date_time = datetime.strptime(start_date + start_time, "%Y-%m-%d%H:%M:%S")
 end_date_time = datetime.strptime(end_date + end_time, "%Y-%m-%d%H:%M:%S")
@@ -82,6 +82,13 @@ end_date_time = datetime.strptime(end_date + end_time, "%Y-%m-%d%H:%M:%S")
 import yfinance as yf
 
 df = yf.download(symbol, end=end_date_time, start=start_date_time, interval=interval)
+# Convert to datetime
+df['Datetime'] = pd.to_datetime(df.index)
+
+# Extract time
+#df['Time'] = df['Datetime'].dt.time
+df['Hour'] = df['Datetime'].dt.hour
+#df['DayOfWeek'] = df['Datetime'].dt.dayofweek
 
 
 if df.size >= 18000:
@@ -213,10 +220,7 @@ n_output_neurons = output_sequence_length
 # Model with n_neurons = inputshape Timestamps, each with x_train.shape[2] variables
 n_input_neurons = x_train.shape[1] * x_train.shape[2]
 print(n_input_neurons, x_train.shape[1], x_train.shape[2])
-model.add(
-    LSTM(128, return_sequences=True, input_shape=(x_train.shape[1], x_train.shape[2]))
-)
-model.add(LSTM(64, return_sequences=False))
+model.add(LSTM(400, return_sequences=False, input_shape=(x_train.shape[1], x_train.shape[2])))
 model.add(Dense(n_output_neurons))
 
 # Compile the model
@@ -381,7 +385,7 @@ print(f"Actual High =", actualDf["High"].values.max())
 print(f"Actual Difference =", ActualHigh.max() - Predicted_High)
 
 
-if np.round(MAE, 2) <= 40.00 and np.round(MAPE, 2) <= 0.20 and np.round(MDAPE, 2) <=  0.15:
+if np.round(MAE, 2) <= 36.73 and np.round(MAPE, 2) <= 0.16 and np.round(MDAPE, 2) <=  0.12:    
     print("Working \U0001F911")
     print(f"Writing to {output_csv_path}")
     # Open the file in write mode and create a csv.writer object
